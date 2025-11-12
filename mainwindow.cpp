@@ -5,7 +5,9 @@
 #include <QDebug>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QFile>
 
+void resetDatabase();
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -18,6 +20,8 @@ MainWindow::MainWindow(QWidget *parent)
     // Создание таблицы, если её нет
     MainWindow::CreateFields();
 
+    //resetDatabase();
+
     // Настройка модели
     QSqlTableModel *model = MainWindow::SettingTable();
 
@@ -25,17 +29,19 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableView->setModel(model);
 
     // Создание обработчика
-    BtnAddAction* addAction = new BtnAddAction(model, this);
+    BtnAddAction* addAction = new BtnAddAction(model, ui->LneName, ui->LnePosition, ui->LneSalary, ui->LneDate, this);
 
     // Подключение кнопки
     connect(ui->BtnAdd, &QPushButton::clicked, this, [=]() {
         QString name = ui->LneName->text();
         QString position = ui->LnePosition->text();
-        double salary = ui->spinBoxSalary->value();
-        QDate date = ui->dateEditData->date();
+        QString salary = ui->LneSalary->text();
+        QString date = ui->LneDate->text();
 
         addAction->onAddClicked(name, position, salary, date);
     });
+
+
 }
 
 
@@ -73,4 +79,10 @@ QSqlTableModel* MainWindow::SettingTable(){
     model->setHeaderData(4, Qt::Horizontal, "Дата найма");
     model->select();
     return model;
+}
+
+void resetDatabase()
+{
+    QSqlDatabase::database().close(); // обязательно закрыть соединение
+    QFile::remove("employees.db");    // удаление файла
 }

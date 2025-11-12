@@ -1,5 +1,6 @@
 QT       += core gui
 QT += sql
+QT += widgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -18,14 +19,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     btnaddaction.cpp \
+    btneditaction.cpp \
+    datavalidator.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     btnaddaction.h \
+    btneditaction.h \
+    datavalidator.h \
     mainwindow.h
 
 FORMS += \
+    btneditwindow.ui \
     mainwindow.ui
 
 # Default rules for deployment.
