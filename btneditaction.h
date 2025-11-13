@@ -2,9 +2,10 @@
 #define BTNEDITACTION_H
 
 //#include <QDateEdit>
+#include "datavalidator.h"
+
 #include <QSqlTableModel>
 #include <QString>
-
 
 
 class BtnEditAction : public QObject {
@@ -16,6 +17,7 @@ public:
                         const QString& date);
     void onBtnEditClicked(QWidget* parent);
 private:
+    DataValidator validator;
     QSqlTableModel* model;
 };
 

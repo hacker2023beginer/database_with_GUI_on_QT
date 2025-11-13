@@ -3,6 +3,9 @@
 #include <QSqlRecord>
 #include <QSqlError>
 #include <QInputDialog>
+#include <QMessageBox>
+#include "btneditwindow.h"
+#include "ui_btneditwindow.h"
 BtnEditAction::BtnEditAction(QSqlTableModel* model, QObject* parent): QObject(parent),
     model(model)
 {
@@ -17,45 +20,61 @@ void BtnEditAction::updateEmployeeById(int row, const QString& name,
             return;
         }
 
-        QSqlRecord record = model->record(row);
+    QSqlRecord record = model->record(row);
 
-        record.setValue("name", name);
-        record.setValue("position", position);
-        record.setValue("salary", salary);
-        record.setValue("hire_date", date);
+    record.setValue("name", name);
+    record.setValue("position", position);
+    record.setValue("salary", salary);
+    record.setValue("hire_date", date);
 
-        if (!model->setRecord(row, record)) {
-            qWarning() << "Не удалось обновить запись в модели";
-            return;
-        }
+    if (!model->setRecord(row, record)) {
+        qWarning() << "Не удалось обновить запись в модели";
+        return;
+    }
 
-        if (!model->submitAll()) {
-            qWarning() << "Ошибка при сохранении:" << model->lastError().text();
-            model->revertAll(); // откатить изменения
-        }
+    if (!model->submitAll()) {
+        qWarning() << "Ошибка при сохранении:" << model->lastError().text();
+        model->revertAll(); // откатить изменения
+    }
 }
 
 void BtnEditAction::onBtnEditClicked(QWidget* parent)
 {
-    bool ok;
-    int id = QInputDialog::getInt(parent,
-                                  "Редактирование записи",
-                                  "Введите ID сотрудника:",
-                                  0,   // значение по умолчанию
-                                  0,   // минимальное
-                                  1000000, // максимальное
-                                  1,   // шаг
-                                  &ok);
+    BtnEditWindow *dlg = new BtnEditWindow(parent);
+    if (dlg->exec() == QDialog::Accepted) {
+            // получаем данные из диалога
+            //int row = dlg->getEmployeeId().toInt();   // индекс строки
+        QString name = dlg->getNewName();
+        QString position = dlg->getNewPosition();
+        QString salary = dlg->getNewSalary();
+        QString date = dlg->getNewDate(); // или поле в форме
+        int id = dlg->getEmployeeId().toInt();
 
-    if (ok) {
-//        EditEmployeeDialog dlg(parent);
-//        if (dlg.exec() == QDialog::Accepted) {
-//            QString newName = dlg.name();
-//            QString newPosition = dlg.position();
-//            QString newSalary = dlg.salary();
-//            QString newDate = dlg.date();
+        if (!validator.isValidEmployee(name, position, salary)){
+           QMessageBox::warning(nullptr, "Warning", "Incorrect input data");
+           return;
+        }
 
-//            updateEmployeeById(id, newName, newPosition, newSalary, newDate);
-//         }
-    }
+
+            int row = -1;
+
+            // ищем строку, где поле "id" совпадает
+            for (int i = 0; i < model->rowCount(); ++i) {
+                QSqlRecord rec = model->record(i);
+                if (rec.value("id").toInt() == id) {
+                    row = i;
+                    break;
+                }
+            }
+
+            if (row == -1) {
+                qWarning() << "Запись с id =" << id << " не найдена";
+                return;
+            }
+
+            // обновляем запись
+            updateEmployeeById(row, name, position, salary, date);
+        }
+    //show() if need to use main ui
+
 }

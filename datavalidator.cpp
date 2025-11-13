@@ -49,3 +49,7 @@ bool DataValidator::salaryValidator(QString text){
     }
     return false;
 }
+
+bool DataValidator::isValidEmployee(QString name, QString position, QString salary){
+    return nameValidator(name) && salaryValidator(salary) && positionValidator(position);
+}

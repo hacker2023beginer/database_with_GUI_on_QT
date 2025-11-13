@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "btnaddaction.h"
 #include "ui_mainwindow.h"
+#include "btneditaction.h"
 #include <QSqlTableModel>
 #include <QDebug>
 #include <QSqlError>
@@ -27,6 +28,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Привязка модели к таблице
     ui->tableView->setModel(model);
+    ui->tableView->horizontalHeader()->setStretchLastSection(true);
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     // Создание обработчика
     BtnAddAction* addAction = new BtnAddAction(model, ui->LneName, ui->LnePosition, ui->LneSalary, ui->LneDate, this);
@@ -41,6 +44,11 @@ MainWindow::MainWindow(QWidget *parent)
         addAction->onAddClicked(name, position, salary, date);
     });
 
+    BtnEditAction* editAction = new BtnEditAction(model, this);
+    connect(ui->BtnEdit, &QPushButton::clicked, this, [=]() {
+
+        editAction->onBtnEditClicked(this);
+    });
 
 }
 
@@ -66,7 +74,7 @@ void MainWindow::CreateFields(){
                "name TEXT, "
                "position TEXT, "
                "salary REAL, "
-               "date_hired DATE)");
+               "date_hired TEXT)");
 }
 
 QSqlTableModel* MainWindow::SettingTable(){

@@ -20,6 +20,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     btnaddaction.cpp \
     btneditaction.cpp \
+    btneditwindow.cpp \
     datavalidator.cpp \
     main.cpp \
     mainwindow.cpp
@@ -27,6 +28,7 @@ SOURCES += \
 HEADERS += \
     btnaddaction.h \
     btneditaction.h \
+    btneditwindow.h \
     datavalidator.h \
     mainwindow.h
 

@@ -13,6 +13,7 @@ public:
     bool ageValidator(QString text);
     bool salaryValidator(QString text);
     bool positionValidator(QString text);
+    bool isValidEmployee(QString name, QString position, QString salary);
 private:
     const QString AGE_REGEXP = "^[1-9][0-9]?$|^100$";
     const QString NAME_REGEXP = "^[A-Z][a-z]* [A-Z][a-z]*$";
