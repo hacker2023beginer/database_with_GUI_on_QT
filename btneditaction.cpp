@@ -25,7 +25,7 @@ void BtnEditAction::updateEmployeeById(int row, const QString& name,
     record.setValue("name", name);
     record.setValue("position", position);
     record.setValue("salary", salary);
-    record.setValue("hire_date", date);
+    record.setValue("date_hired", date);
 
     if (!model->setRecord(row, record)) {
         qWarning() << "Не удалось обновить запись в модели";
