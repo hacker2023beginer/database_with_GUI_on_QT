@@ -4,6 +4,7 @@
 #include <QSqlError>
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QSqlQuery>
 #include "btneditwindow.h"
 #include "ui_btneditwindow.h"
 BtnEditAction::BtnEditAction(QSqlTableModel* model, QObject* parent): QObject(parent),
@@ -53,13 +54,13 @@ void BtnEditAction::onBtnEditClicked(QWidget* parent)
         QString name = dlg->getNewName();
         QString position = dlg->getNewPosition();
         QString salary = dlg->getNewSalary();
-        QString date = dlg->getNewDate(); // или поле в форме
+        QString date = dlg->getNewDate();
         int id = dlg->getEmployeeId().toInt();
 
-        if (!validator.isValidEmployee(name, position, salary)){
-           QMessageBox::warning(nullptr, "Warning", "Incorrect input data");
-           return;
-        }
+//        if (!validator.isValidEmployee(name, position, salary)){
+//           QMessageBox::warning(nullptr, "Warning", "Incorrect input data");
+//           return;
+//        }
 
 
             int row = -1;
@@ -79,6 +80,29 @@ void BtnEditAction::onBtnEditClicked(QWidget* parent)
             }
 
             // обновляем запись
+
+            QSqlQuery query;
+            query.prepare("SELECT * FROM employees WHERE id = :id");
+            int intId = int(id);
+            query.bindValue(":id", intId);
+            if (query.exec() && query.next()) {
+                if (name == "") {
+                    QString value = query.value(1).toString();
+                    name = value;
+                }
+                if (position == "") {
+                    QString value = query.value(2).toString();
+                    position = value;
+                }
+                if (salary == "") {
+                    QString value = query.value(3).toString();
+                    salary = value;
+                }
+                if (date == "") {
+                    QString value = query.value(4).toString();
+                    date = value;
+                }
+            }
             updateEmployeeById(row, name, position, salary, date);
         }
     //show() if need to use main ui
