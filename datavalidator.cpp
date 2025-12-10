@@ -2,7 +2,7 @@
 
 #include <QRegularExpression>
 
-DataValidator::DataValidator()
+DataValidator::DataValidator() : model(model)
 {
 
 }
@@ -52,4 +52,9 @@ bool DataValidator::salaryValidator(QString text){
 
 bool DataValidator::isValidEmployee(QString name, QString position, QString salary){
     return nameValidator(name) && salaryValidator(salary) && positionValidator(position);
+}
+
+bool DataValidator::isUniqueName(){
+    //model->query();
+    return true;
 }

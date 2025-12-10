@@ -2,6 +2,7 @@
 #include "btnaddaction.h"
 #include "ui_mainwindow.h"
 #include "btneditaction.h"
+#include "btndeleteaction.h"
 #include <QSqlTableModel>
 #include <QDebug>
 #include <QSqlError>
@@ -50,6 +51,10 @@ MainWindow::MainWindow(QWidget *parent)
         editAction->onBtnEditClicked(this);
     });
 
+    BtnDeleteAction* deleteAction = new BtnDeleteAction(model, this);
+    connect(ui->BtnDelete, &QPushButton::clicked, this, [=]() {
+        deleteAction->onBtnDeleteClicked(this);
+    });
 }
 
 
@@ -71,7 +76,7 @@ void MainWindow::CreateFields(){
     QSqlQuery query;
     query.exec("CREATE TABLE IF NOT EXISTS employees ("
                "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-               "name TEXT, "
+               "name TEXT UNIQUE, "
                "position TEXT, "
                "salary REAL, "
                "date_hired TEXT)");

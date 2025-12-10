@@ -19,20 +19,27 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     btnaddaction.cpp \
+    btndeleteaction.cpp \
+    btndeletewindow.cpp \
     btneditaction.cpp \
     btneditwindow.cpp \
+    btnsavedatabaseaction.cpp \
     datavalidator.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     btnaddaction.h \
+    btndeleteaction.h \
+    btndeletewindow.h \
     btneditaction.h \
     btneditwindow.h \
+    btnsavedatabaseaction.h \
     datavalidator.h \
     mainwindow.h
 
 FORMS += \
+    btndeletewindow.ui \
     btneditwindow.ui \
     mainwindow.ui
 

@@ -34,6 +34,12 @@ void BtnEditAction::updateEmployeeById(int row, const QString& name,
 
     if (!model->submitAll()) {
         qWarning() << "Ошибка при сохранении:" << model->lastError().text();
+        if (!model->submitAll()) {
+            qWarning() << "Ошибка сохранения:" << model->lastError().text();
+            if (model->lastError().text().contains("UNIQUE")) {
+                QMessageBox::warning(nullptr, "Warning", "Имя уже существует!");
+            }
+        }
         model->revertAll(); // откатить изменения
     }
 }

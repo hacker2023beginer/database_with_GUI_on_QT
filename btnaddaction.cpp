@@ -3,6 +3,7 @@
 #include <QSqlRecord>
 #include <QSqlError>
 #include <QToolTip>
+#include <QMessageBox>
 //#include <QDateEdit>
 
 BtnAddAction::BtnAddAction(QSqlTableModel* model,
@@ -27,7 +28,7 @@ void BtnAddAction::onAddClicked(const QString& name, const QString& position, QS
             nameEdit->setStyleSheet("border: 1px solid red;");
             QToolTip::showText(
                 nameEdit->mapToGlobal(QPoint(0, nameEdit->height())),
-                "Некорректное имя",
+                "Incorrect name",
                 nameEdit
             );
             return;
@@ -38,7 +39,7 @@ void BtnAddAction::onAddClicked(const QString& name, const QString& position, QS
             postEdit->setStyleSheet("border: 1px solid red;");
             QToolTip::showText(
                 postEdit->mapToGlobal(QPoint(0, postEdit->height())),
-                "Некорректная позиция",
+                "Incorrect position",
                 postEdit
             );
             return;
@@ -49,7 +50,7 @@ void BtnAddAction::onAddClicked(const QString& name, const QString& position, QS
             salaryEdit->setStyleSheet("border: 1px solid red;");
             QToolTip::showText(
                 salaryEdit->mapToGlobal(QPoint(0, salaryEdit->height())),
-                "Некорректная зарплата",
+                "Incorrect salary",
                 salaryEdit
             );
             return;
@@ -63,9 +64,15 @@ void BtnAddAction::onAddClicked(const QString& name, const QString& position, QS
     record.setValue("date_hired", date);
 
     if (!model->insertRecord(-1, record)) {
-        qDebug() << "Ошибка при добавлении:" << model->lastError().text();
+        qDebug() << "Error while adding:" << model->lastError().text();
     } else {
-        model->submitAll(); // сохраняет в БД
+        //model->submitAll(); // сохраняет в БД
+        if (!model->submitAll()) {
+            qWarning() << "Ошибка сохранения:" << model->lastError().text();
+            if (model->lastError().text().contains("UNIQUE")) {
+                QMessageBox::warning(nullptr, "Warning", "Имя уже существует!");
+            }
+        }
         model->select();    // обновляет отображение
     }
 }
