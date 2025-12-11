@@ -23,6 +23,8 @@ SOURCES += \
     btndeletewindow.cpp \
     btneditaction.cpp \
     btneditwindow.cpp \
+    btnfilteraction.cpp \
+    btnfilterwindow.cpp \
     btnsavedatabaseaction.cpp \
     datavalidator.cpp \
     main.cpp \
@@ -34,6 +36,8 @@ HEADERS += \
     btndeletewindow.h \
     btneditaction.h \
     btneditwindow.h \
+    btnfilteraction.h \
+    btnfilterwindow.h \
     btnsavedatabaseaction.h \
     datavalidator.h \
     mainwindow.h
@@ -41,6 +45,7 @@ HEADERS += \
 FORMS += \
     btndeletewindow.ui \
     btneditwindow.ui \
+    btnfilterwindow.ui \
     mainwindow.ui
 
 # Default rules for deployment.

@@ -103,6 +103,10 @@ void BtnEditAction::onBtnEditClicked(QWidget* parent)
                     date = value;
                 }
             }
+            if (!validator.isValidEmployee(name, position, salary)){
+                       QMessageBox::warning(nullptr, "Warning", "Incorrect input data");
+                       return;
+                    }
             updateEmployeeById(row, name, position, salary, date);
         }
     //show() if need to use main ui

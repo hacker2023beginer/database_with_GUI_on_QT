@@ -17,6 +17,7 @@ public:
     ~MainWindow();
     void ConnectToDatabase();
     void CreateFields();
+    void onHeaderClicked(int column);
     QSqlTableModel *SettingTable();
 
 private:

@@ -3,6 +3,8 @@
 #include "ui_mainwindow.h"
 #include "btneditaction.h"
 #include "btndeleteaction.h"
+#include "clickontableheader.h"
+#include "btnfilteraction.h"
 #include <QSqlTableModel>
 #include <QDebug>
 #include <QSqlError>
@@ -31,6 +33,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableView->setModel(model);
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    // Подключение обработчика нажатия колонки
+    ui->tableView->setSortingEnabled(true);
 
     // Создание обработчика
     BtnAddAction* addAction = new BtnAddAction(model, ui->LneName, ui->LnePosition, ui->LneSalary, ui->LneDate, this);
@@ -55,6 +61,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->BtnDelete, &QPushButton::clicked, this, [=]() {
         deleteAction->onBtnDeleteClicked(this);
     });
+
+    BtnFilterAction* filterAction = new BtnFilterAction(model, this);
+    connect(ui->btnFilter, &QPushButton::clicked, this, [=]() {filterAction->onBtnFilterClicked(this);});
+    connect(ui->btnFilterReset, &QPushButton::clicked, this, [=]() {filterAction->onBtnFilterResetClicked(this);});
 }
 
 
