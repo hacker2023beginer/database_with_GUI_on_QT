@@ -53,7 +53,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     BtnEditAction* editAction = new BtnEditAction(model, this);
     connect(ui->BtnEdit, &QPushButton::clicked, this, [=]() {
-
         editAction->onBtnEditClicked(this);
     });
 
