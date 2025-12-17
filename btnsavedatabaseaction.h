@@ -10,7 +10,7 @@ class BtnSaveDatabaseAction : public QObject
     Q_OBJECT
 public:
     BtnSaveDatabaseAction(QSqlTableModel* model, QObject* parent);
-    void saveModelToJSON(QSqlTableModel* model, const QString& fileName);
+    void saveModelToJSON(QSqlTableModel *model, QWidget* parent);
 private:
     QSqlTableModel* model;
 };

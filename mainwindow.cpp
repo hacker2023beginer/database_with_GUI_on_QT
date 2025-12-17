@@ -5,11 +5,15 @@
 #include "btndeleteaction.h"
 #include "clickontableheader.h"
 #include "btnfilteraction.h"
+#include "btnsavedatabaseaction.h"
+#include "btnsearchaction.h"
 #include <QSqlTableModel>
 #include <QDebug>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QFile>
+#include <QGuiApplication>
+#include <qscreen.h>
 
 void resetDatabase();
 MainWindow::MainWindow(QWidget *parent)
@@ -17,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
+    this->resize(800, 600);
     // Подключение к базе данных
     MainWindow::ConnectToDatabase();
 
@@ -64,6 +68,23 @@ MainWindow::MainWindow(QWidget *parent)
     BtnFilterAction* filterAction = new BtnFilterAction(model, this);
     connect(ui->btnFilter, &QPushButton::clicked, this, [=]() {filterAction->onBtnFilterClicked(this);});
     connect(ui->btnFilterReset, &QPushButton::clicked, this, [=]() {filterAction->onBtnFilterResetClicked(this);});
+    BtnSaveDatabaseAction *saveAction = new BtnSaveDatabaseAction(model, this);
+    connect(ui->BtnSaveToDatabase, &QPushButton::clicked, this, [=]() {
+        saveAction->saveModelToJSON(model, this);
+    });
+
+    connect(ui->BtnSearch, &QPushButton::clicked, this, [=]() {
+        QString kind = ui->comboBox->currentText();
+        QString searchValue = ui->LneSearch->text();
+        BtnSearchAction *searchAction = new BtnSearchAction(this);
+        searchAction->search(kind, searchValue);
+    });
+    ui->actionSave->setVisible(true);
+    connect(ui->actionSave, &QAction::triggered, this, [=](){
+        saveAction->saveModelToJSON(model, this);
+    });
+    ui->actionSave->setIcon(QIcon("Icons/Save.ico"));
+
 }
 
 
@@ -95,10 +116,10 @@ QSqlTableModel* MainWindow::SettingTable(){
     QSqlTableModel* model = new QSqlTableModel(this);
     model->setTable("employees");
     model->setEditStrategy(QSqlTableModel::OnManualSubmit);
-    model->setHeaderData(1, Qt::Horizontal, "Имя");
-    model->setHeaderData(2, Qt::Horizontal, "Должность");
-    model->setHeaderData(3, Qt::Horizontal, "Зарплата");
-    model->setHeaderData(4, Qt::Horizontal, "Дата найма");
+    model->setHeaderData(1, Qt::Horizontal, "Name"); //Имя
+    model->setHeaderData(2, Qt::Horizontal, "Position"); //Должность
+    model->setHeaderData(3, Qt::Horizontal, "Salary"); //Зарплата
+    model->setHeaderData(4, Qt::Horizontal, "Date"); //Дата найма
     model->select();
     return model;
 }

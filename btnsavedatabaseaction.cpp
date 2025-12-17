@@ -1,6 +1,7 @@
 #include "btnsavedatabaseaction.h"
 
 #include <QFile>
+#include <QFileDialog>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -11,7 +12,14 @@ BtnSaveDatabaseAction::BtnSaveDatabaseAction(QSqlTableModel* model, QObject* par
 
 }
 
-void BtnSaveDatabaseAction::saveModelToJSON(QSqlTableModel *model, const QString &fileName){
+void BtnSaveDatabaseAction::saveModelToJSON(QSqlTableModel *model, QWidget* parent){
+    QString fileName = QFileDialog::getSaveFileName(
+                parent,
+                "Сохранить базу в JSON",
+                QDir::homePath(),
+                "JSON файлы (*.json)"
+            );
+
     QJsonArray rows;
     for (int row = 0; row < model->rowCount(); ++row){
         QJsonObject obj;

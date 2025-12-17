@@ -26,6 +26,7 @@ SOURCES += \
     btnfilteraction.cpp \
     btnfilterwindow.cpp \
     btnsavedatabaseaction.cpp \
+    btnsearchaction.cpp \
     datavalidator.cpp \
     main.cpp \
     mainwindow.cpp
@@ -39,6 +40,7 @@ HEADERS += \
     btnfilteraction.h \
     btnfilterwindow.h \
     btnsavedatabaseaction.h \
+    btnsearchaction.h \
     datavalidator.h \
     mainwindow.h
 
