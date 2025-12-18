@@ -79,11 +79,11 @@ MainWindow::MainWindow(QWidget *parent)
         BtnSearchAction *searchAction = new BtnSearchAction(this);
         searchAction->search(kind, searchValue);
     });
-    ui->actionSave->setVisible(true);
-    connect(ui->actionSave, &QAction::triggered, this, [=](){
+    ui->actionSave_2->setVisible(true);
+    connect(ui->actionSave_2, &QAction::triggered, this, [=](){
         saveAction->saveModelToJSON(model, this);
     });
-    ui->actionSave->setIcon(QIcon("Icons/Save.ico"));
+
 
 }
 
